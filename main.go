@@ -6,14 +6,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sync"
 	"time"
 )
 
-const ROW_LEN = 9
-
 func main() {
-
 	if len(os.Args) != 3 {
 		fmt.Println("Usage: go run main.go <input_file> <number-columns>")
 		os.Exit(1)
@@ -188,45 +184,27 @@ func hasEmptyCell(board *[9][9]int) bool {
 	return false
 }
 
-func backtrack(board *[ROW_LEN][ROW_LEN]int) bool {
+func backtrack(board *[9][9]int) bool {
 	if !hasEmptyCell(board) {
 		return true
 	}
-
-	var wg sync.WaitGroup
-	var mu sync.Mutex
-	foundSolution := false
-
-	for i := 0; i < ROW_LEN; i++ {
-		for j := 0; j < ROW_LEN; j++ {
+	for i := 0; i < 9; i++ {
+		for j := 0; j < 9; j++ {
 			if board[i][j] == 0 {
 				for candidate := 9; candidate >= 1; candidate-- {
-					wg.Add(1)
-					go func(x, y, value int) {
-						defer wg.Done()
-						mu.Lock()
-						board[x][y] = value
-						mu.Unlock()
-						if isBoardValid(board) {
-							if backtrack(board) {
-								mu.Lock()
-								foundSolution = true
-								mu.Unlock()
-							}
+					board[i][j] = candidate
+					if isBoardValid(board) {
+						if backtrack(board) {
+							return true
 						}
-						mu.Lock()
-						board[x][y] = 0
-						mu.Unlock()
-					}(i, j, candidate)
+						board[i][j] = 0
+					} else {
+						board[i][j] = 0
+					}
 				}
-				break
+				return false
 			}
 		}
-		if foundSolution {
-			break
-		}
 	}
-
-	wg.Wait()
-	return foundSolution
+	return false
 }
