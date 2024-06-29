@@ -10,7 +10,7 @@ import (
 
 const (
 	ROW_LEN    = 16
-	candidates = "GFEDCBA987654321"
+	candidates = "123456789ABCDEFG"
 )
 var loops int
 
