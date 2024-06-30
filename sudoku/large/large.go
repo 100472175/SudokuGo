@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-
 	"os"
+	"time"
 )
 
 const (
@@ -267,4 +267,26 @@ func Count0(board *[ROW_LEN][ROW_LEN]int) int {
 		}
 	}
 	return count
+}
+
+func Preprocessing(board *[16][16]int) *[16][16][]int {
+	time_now := time.Now()
+	PrintBoard(*board)
+	num0 := []int{-1, 0}
+	PreprocessBoard(board)
+	num0 = append(num0, Count0(board))
+	var candidates *[16][16][]int
+	for {
+		candidates = PreprocessBoard(board)
+		if num0[len(num0)-1] == num0[len(num0)-2] {
+			break
+		} else {
+			num0 = append(num0, Count0(board))
+		}
+		fmt.Println("Number of unknowns: ", num0[len(num0)-1])
+	}
+	fmt.Println("Time taken for preprocessing: ", time.Since(time_now))
+	fmt.Println("Board after preprocessing: ", num0[len(num0)-1])
+	PrintBoard(*board)
+	return candidates
 }

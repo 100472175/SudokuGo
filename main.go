@@ -35,25 +35,7 @@ func main() {
 
 	if lines == 16 {
 		board := large.ParseInput(os.Args[1])
-		time_now := time.Now()
-		large.PrintBoard(board)
-		num0 := []int{-1, 0}
-		large.PreprocessBoard(&board)
-		num0 = append(num0, large.Count0(&board))
-		var candidates *[16][16][]int
-		for {
-			candidates = large.PreprocessBoard(&board)
-			if num0[len(num0)-1] == num0[len(num0)-2] {
-				break
-			} else {
-				num0 = append(num0, large.Count0(&board))
-			}
-			fmt.Println("Number of unknowns: ", num0[len(num0)-1])
-		}
-		fmt.Println("Time taken for preprocessing: ", time.Since(time_now))
-		fmt.Println("Board after preprocessing: ", num0[len(num0)-1])
-		large.PrintBoard(board)
-
+		candidates := large.Preprocessing(&board)
 		if large.Backtrack(&board, candidates) {
 			fmt.Println("The 16x16 Sudoku has been solved.")
 			large.PrintBoard(board)
