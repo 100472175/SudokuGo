@@ -72,7 +72,7 @@ func ParseInput(input string) [9][9]int {
 			scanner.Scan()
 			line := scanner.Text()
 			for j, c := range line {
-				if c == '.' || c == 'x' || c == 'X' || c == '0' {
+				if c == '.' || c == 'x' || c == 'X' || c == '0' || c == ' ' {
 					board[i][j] = 0
 				} else {
 					board[i][j] = int(c - '0')
@@ -172,4 +172,54 @@ func Backtrack(board *[9][9]int) bool {
 		}
 	}
 	return false
+}
+
+func PreprocessBoard(board *[9][9]int) *[9][9][]int {
+	candidatesBoard := [9][9][]int{}
+	for i := 0; i < 9; i++ {
+		for j := 0; j < 9; j++ {
+			if board[i][j] != 0 {
+				continue
+			}
+			candidates := CalculateCandidates(board, i, j)
+			for index, value := range candidates {
+				if value == 0 {
+					candidates = append(candidates, index)
+				}
+			}
+			if len(candidates) == 1 {
+				board[i][j] = candidates[0]
+			} else {
+				candidatesBoard[i][j] = candidates
+			}
+
+		}
+	}
+	return &candidatesBoard
+
+}
+
+func CalculateCandidates(board *[9][9]int, row, col int) []int {
+	if board[row][col] != 0 {
+		return []int{}
+	}
+	candidates := [10]int{}
+	for i := 0; i < 9; i++ {
+		candidates[board[row][i]] = 1
+		candidates[board[i][col]] = 1
+	}
+	startRow := row - row%3
+	startCol := col - col%3
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			candidates[board[startRow+i][startCol+j]] = 1
+		}
+	}
+	result := []int{}
+	for i := 1; i < 10; i++ {
+		if candidates[i] == 0 {
+			result = append(result, i)
+		}
+	}
+	return result
 }

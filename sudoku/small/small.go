@@ -22,7 +22,7 @@ func PrintBoard(board [ROW_NUM][ROW_NUM]int) {
 				fmt.Print("|")
 			}
 		}
-		if row == 1 || row == 3{
+		if row == 1 || row == 3 {
 			fmt.Println("\n+-----+-----+")
 		} else {
 			fmt.Println()
@@ -74,7 +74,7 @@ func ParseInput(input string) [ROW_NUM][ROW_NUM]int {
 			scanner.Scan()
 			line := scanner.Text()
 			for j, c := range line {
-				if c == '.' || c == 'x' || c == 'X' || c == '0' {
+				if c == '.' || c == 'x' || c == 'X' || c == '0' || c == ' ' {
 					board[i][j] = 0
 				} else {
 					board[i][j] = int(c - '0')
@@ -99,7 +99,6 @@ func HasDuplicates(counter [5]int) bool {
 }
 
 func IsBoardValid(board *[ROW_NUM][ROW_NUM]int) bool {
-
 	//check duplicates by row
 	for row := 0; row < ROW_NUM; row++ {
 		counter := [5]int{}

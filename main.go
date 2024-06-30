@@ -13,8 +13,8 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 3 {
-		fmt.Println("Usage: go run main.go <input_file> <number-columns>")
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: go run main.go <input_file>")
 		os.Exit(1)
 	}
 	now := time.Now()
@@ -46,11 +46,12 @@ func main() {
 		os.Exit(0)
 	} else if lines == 9 {
 		board := medium.ParseInput(os.Args[1])
+		medium.PreprocessBoard(&board)
 		if medium.Backtrack(&board) {
 			fmt.Println("The 9x9 Sudoku has been solved.")
 			medium.PrintBoard(board)
 		} else {
-			fmt.Printf("The 9zx9 Sudoku can't be solved.")
+			fmt.Printf("The 9x9 Sudoku can't be solved.")
 		}
 	} else if lines == 4 {
 		board := small.ParseInput(os.Args[1])
@@ -61,7 +62,7 @@ func main() {
 			fmt.Println("The 4x4 Sudoku can't be solved.")
 		}
 	} else {
-		fmt.Println("Invalid number of columns. Please enter 4, 9, or 16.")
+		fmt.Println("Invalid number of columns. Please enter 4, 9, or 16 in the file.")
 	}
 
 }

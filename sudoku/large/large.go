@@ -43,7 +43,7 @@ func ParseInput(input string) [ROW_LEN][ROW_LEN]rune {
 			scanner.Scan()
 			line := scanner.Text()
 			for j, c := range line {
-				if c == '.' || c == 'x' || c == 'X' || c == '0' {
+				if c == '.' || c == 'x' || c == 'X' || c == '0' || c == ' ' {
 					board[i][j] = 0
 				} else {
 					board[i][j] = c
