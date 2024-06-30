@@ -32,7 +32,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error counting the lines: %v", err)
 	}
-	lines++
 
 	if lines == 16 {
 		board := large.ParseInput(os.Args[1])
@@ -46,8 +45,8 @@ func main() {
 		os.Exit(0)
 	} else if lines == 9 {
 		board := medium.ParseInput(os.Args[1])
-		medium.PreprocessBoard(&board)
-		if medium.Backtrack(&board) {
+		candidates := medium.PreprocessBoard(&board)
+		if medium.Backtrack(&board, candidates) {
 			fmt.Println("The 9x9 Sudoku has been solved.")
 			medium.PrintBoard(board)
 		} else {
@@ -78,7 +77,7 @@ func lineCounter(r io.Reader) (int, error) {
 
 		switch {
 		case err == io.EOF:
-			return count, nil
+			return count+1, nil
 
 		case err != nil:
 			return count, err

@@ -1,0 +1,17 @@
+Sin el preprocesado:
+Iteraciones: 196680
+Tiempo, con redirected output: 374.059583ms
+
+Con 1 preprocesado:
+Iteraciones: 112610
+Tiempo, con redirected output: 223.560083ms
+
+Con 3 preprocesados:
+Iteraciones: 112610
+Tiempo, con redirected output: 211.589708ms
+
+Con los candidatos concretos:
+Iteraciones: 7635
+Tiempo, con 33.418209ms (13ms sin logs)
+
+Diferencia de iteraciones: 84,070

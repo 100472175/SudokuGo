@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+var loops int
+
 func PrintBoard(board [9][9]int) {
 	fmt.Println("+-------+-------+-------+")
 	for row := 0; row < 9; row++ {
@@ -149,17 +151,19 @@ func HasEmptyCell(board *[9][9]int) bool {
 	return false
 }
 
-func Backtrack(board *[9][9]int) bool {
+func Backtrack(board *[9][9]int, candidates *[9][9][]int) bool {
+	loops++
+	fmt.Println("Llevo ", loops, " iteraciones")
 	if !HasEmptyCell(board) {
 		return true
 	}
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
 			if board[i][j] == 0 {
-				for candidate := 9; candidate >= 1; candidate-- {
-					board[i][j] = candidate
+				for candidate := range candidates[i][j] {
+					board[i][j] = candidates[i][j][candidate]
 					if IsBoardValid(board) {
-						if Backtrack(board) {
+						if Backtrack(board, candidates) {
 							return true
 						}
 						board[i][j] = 0
@@ -196,7 +200,6 @@ func PreprocessBoard(board *[9][9]int) *[9][9][]int {
 		}
 	}
 	return &candidatesBoard
-
 }
 
 func CalculateCandidates(board *[9][9]int, row, col int) []int {
