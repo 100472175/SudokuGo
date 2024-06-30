@@ -1,0 +1,27 @@
+Llevo  151500000  iteraciones
+Llevo  151600000  iteraciones
+Llevo  151700000  iteraciones
+Llevo  151800000  iteraciones
+The 16x16 Sudoku has been solved.
+2FCG | 64A9 | 5B1D | 783E
+9DA5 | F712 | CE38 | G4B6
+6483 | EGBD | 72F9 | C51A
+B17E | 8C35 | 4G6A | 2D9F
+-----+------+------+------+
+152C | D67A | 39B4 | EGF8
+79FB | 35EG | 6C81 | 4A2D
+GA68 | 2F4B | D5E7 | 39C1
+E3D4 | C198 | GA2F | 675B
+-----+------+------+------+
+F7G9 | 1E56 | 2DA3 | 8B4C
+32EA | 98FC | 174B | D6G5
+DC46 | BAG3 | 985E | 1F72
+58B1 | 4D27 | F6GC | 9EA3
+-----+------+------+------+
+CG5D | AB61 | 8472 | F3E9
+8617 | G3CE | AF95 | B2D4
+AB9F | 72D4 | E3C6 | 518G
+4E32 | 598F | B1DG | AC67
+./main input-16.txt 16  55965.29s user 837.14s system 105% cpu 15:00:12.89 total
+~/SudokuGo on main !2 ?6                                                               took 15h 0m 13s at 16:18:30
+>  
