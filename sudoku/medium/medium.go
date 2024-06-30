@@ -7,8 +7,6 @@ import (
 	"os"
 )
 
-var loops int
-
 func PrintBoard(board [9][9]int) {
 	fmt.Println("+-------+-------+-------+")
 	for row := 0; row < 9; row++ {
@@ -152,8 +150,6 @@ func HasEmptyCell(board *[9][9]int) bool {
 }
 
 func Backtrack(board *[9][9]int, candidates *[9][9][]int) bool {
-	loops++
-	fmt.Println("Llevo ", loops, " iteraciones")
 	if !HasEmptyCell(board) {
 		return true
 	}

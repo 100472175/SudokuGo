@@ -36,7 +36,24 @@ func main() {
 	if lines == 16 {
 		board := large.ParseInput(os.Args[1])
 		large.PrintBoard(board)
-		if large.Backtrack(&board) {
+		num_unk := []int{-1, 0}
+		large.PreprocessBoard(&board)
+		num_unk = append(num_unk, large.Count0(&board))
+		var candidates *[16][16][]int
+		for {
+			candidates = large.PreprocessBoard(&board)
+			if num_unk[len(num_unk)-1] == num_unk[len(num_unk)-2] {
+				break
+			} else {
+				num_unk = append(num_unk, large.Count0(&board))
+			}
+			fmt.Println("Number of unknowns: ", num_unk[len(num_unk)-1])
+		}
+		fmt.Println("Board after preprocessing: ")
+		large.PrintBoard(board)
+
+
+		if large.Backtrack(&board, candidates) {
 			fmt.Println("The 16x16 Sudoku has been solved.")
 			large.PrintBoard(board)
 		} else {
@@ -77,7 +94,7 @@ func lineCounter(r io.Reader) (int, error) {
 
 		switch {
 		case err == io.EOF:
-			return count+1, nil
+			return count + 1, nil
 
 		case err != nil:
 			return count, err
