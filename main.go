@@ -42,7 +42,6 @@ func main() {
 		} else {
 			fmt.Println("The 16x16 Sudoku can't be solved.")
 		}
-		os.Exit(0)
 	} else if lines == 9 {
 		board := medium.ParseInput(os.Args[1])
 		candidates := medium.Preprocessing(&board)
