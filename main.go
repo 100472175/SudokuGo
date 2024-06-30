@@ -45,7 +45,7 @@ func main() {
 		os.Exit(0)
 	} else if lines == 9 {
 		board := medium.ParseInput(os.Args[1])
-		candidates := medium.PreprocessBoard(&board)
+		candidates := medium.Preprocessing(&board)
 		if medium.Backtrack(&board, candidates) {
 			fmt.Println("The 9x9 Sudoku has been solved.")
 			medium.PrintBoard(board)

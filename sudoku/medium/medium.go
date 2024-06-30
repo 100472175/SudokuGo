@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 func PrintBoard(board [9][9]int) {
@@ -221,4 +222,38 @@ func CalculateCandidates(board *[9][9]int, row, col int) []int {
 		}
 	}
 	return result
+}
+
+func Count0(board *[9][9]int) int {
+	count := 0
+	for i := 0; i < 9; i++ {
+		for j := 0; j < 9; j++ {
+			if board[i][j] == 0 {
+				count++
+			}
+		}
+	}
+	return count
+}
+
+func Preprocessing(board *[9][9]int) *[9][9][]int {
+	time_now := time.Now()
+	PrintBoard(*board)
+	num0 := []int{-1, 0}
+	PreprocessBoard(board)
+	num0 = append(num0, Count0(board))
+	var candidates *[9][9][]int
+	for {
+		candidates = PreprocessBoard(board)
+		if num0[len(num0)-1] == num0[len(num0)-2] {
+			break
+		} else {
+			num0 = append(num0, Count0(board))
+		}
+		fmt.Println("Number of unknowns: ", num0[len(num0)-1])
+	}
+	fmt.Println("Time taken for preprocessing: ", time.Since(time_now))
+	fmt.Println("Board after preprocessing: ", num0[len(num0)-1])
+	PrintBoard(*board)
+	return candidates
 }
