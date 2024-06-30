@@ -2,5 +2,5 @@
 
 for i in {1..200}
 do
-    ./main input.txt 9 >/dev/null
+    ./main input/9.txt 9 >/dev/null
 done

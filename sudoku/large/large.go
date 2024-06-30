@@ -1,4 +1,4 @@
-package sudoku
+package large
 
 import (
 	"bufio"
@@ -12,6 +12,7 @@ const (
 	ROW_LEN    = 16
 	candidates = "123456789ABCDEFG"
 )
+
 var loops int
 
 func ParseInput(input string) [ROW_LEN][ROW_LEN]rune {
@@ -141,7 +142,7 @@ func hasEmptyCell(board *[ROW_LEN][ROW_LEN]rune) bool {
 
 func Backtrack(board *[ROW_LEN][ROW_LEN]rune) bool {
 	loops++
-	if loops % 100_000 == 0{
+	if loops%100_000 == 0 {
 		fmt.Println("Llevo ", loops, " iteraciones")
 	}
 	if !hasEmptyCell(board) {
