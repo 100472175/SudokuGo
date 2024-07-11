@@ -14,7 +14,7 @@ const (
 
 var loops int
 
-func ParseInput(input string) [ROW_LEN][ROW_LEN]int {
+func ParseInput(input string) [ROW_LEN][ROW_LEN]byte {
 	file, err := os.Open(input)
 	if err != nil {
 		log.Fatalf("Error opening the file: %v", err)
@@ -36,7 +36,7 @@ func ParseInput(input string) [ROW_LEN][ROW_LEN]int {
 		}
 		defer file.Close()
 
-		board := [ROW_LEN][ROW_LEN]int{}
+		board := [ROW_LEN][ROW_LEN]byte{}
 		scanner = bufio.NewScanner(file)
 		for i := 0; i < ROW_LEN; i++ {
 			scanner.Scan()
@@ -61,17 +61,17 @@ func ParseInput(input string) [ROW_LEN][ROW_LEN]int {
 					case 'G':
 						board[i][j] = 16
 					default:
-						board[i][j] = int(c - '0')
+						board[i][j] = byte(c - '0')
 					}
 				}
 			}
 		}
 		return board
 	}
-	return [ROW_LEN][ROW_LEN]int{}
+	return [ROW_LEN][ROW_LEN]byte{}
 }
 
-func PrintBoard(board [ROW_LEN][ROW_LEN]int) {
+func PrintBoard(board [ROW_LEN][ROW_LEN]byte) {
 	fmt.Println("+---------+---------+---------+---------+")
 	for i, row := range board {
 		fmt.Print("| ")
@@ -115,7 +115,7 @@ func PrintBoard(board [ROW_LEN][ROW_LEN]int) {
 	}
 }
 
-func isBoardValid(board *[ROW_LEN][ROW_LEN]int) bool {
+func isBoardValid(board *[ROW_LEN][ROW_LEN]byte) bool {
 
 	//check duplicates by row
 	for row := 0; row < ROW_LEN; row++ {
@@ -170,7 +170,7 @@ func hasDuplicates(counter [ROW_LEN + 1]int) bool {
 	return false
 }
 
-func hasEmptyCell(board *[ROW_LEN][ROW_LEN]int) bool {
+func hasEmptyCell(board *[ROW_LEN][ROW_LEN]byte) bool {
 	for i := 0; i < ROW_LEN; i++ {
 		for j := 0; j < ROW_LEN; j++ {
 			if board[i][j] == 0 {
@@ -181,7 +181,7 @@ func hasEmptyCell(board *[ROW_LEN][ROW_LEN]int) bool {
 	return false
 }
 
-func Backtrack(board *[ROW_LEN][ROW_LEN]int, candidates *[ROW_LEN][ROW_LEN][]int) bool {
+func Backtrack(board *[ROW_LEN][ROW_LEN]byte, candidates *[ROW_LEN][ROW_LEN][]byte) bool {
 	loops++
 	if loops%100_000 == 0 {
 		fmt.Println("Llevo ", loops, " iteraciones")
@@ -210,8 +210,8 @@ func Backtrack(board *[ROW_LEN][ROW_LEN]int, candidates *[ROW_LEN][ROW_LEN][]int
 	return false
 }
 
-func PreprocessBoard(board *[ROW_LEN][ROW_LEN]int) *[ROW_LEN][ROW_LEN][]int {
-	candidatesBoard := [ROW_LEN][ROW_LEN][]int{}
+func PreprocessBoard(board *[ROW_LEN][ROW_LEN]byte) *[ROW_LEN][ROW_LEN][]byte {
+	candidatesBoard := [ROW_LEN][ROW_LEN][]byte{}
 	for i := 0; i < ROW_LEN; i++ {
 		for j := 0; j < ROW_LEN; j++ {
 			if board[i][j] != 0 {
@@ -220,7 +220,7 @@ func PreprocessBoard(board *[ROW_LEN][ROW_LEN]int) *[ROW_LEN][ROW_LEN][]int {
 			candidates := calculateCandidates(board, i, j)
 			for index, value := range candidates {
 				if value == 0 {
-					candidates = append(candidates, index)
+					candidates = append(candidates, byte(index))
 				}
 			}
 			if len(candidates) == 1 {
@@ -232,11 +232,11 @@ func PreprocessBoard(board *[ROW_LEN][ROW_LEN]int) *[ROW_LEN][ROW_LEN][]int {
 	return &candidatesBoard
 }
 
-func calculateCandidates(board *[ROW_LEN][ROW_LEN]int, row, col int) []int {
+func calculateCandidates(board *[ROW_LEN][ROW_LEN]byte, row, col int) []byte {
 	if board[row][col] != 0 {
-		return []int{}
+		return []byte{}
 	}
-	candidates := [17]int{}
+	candidates := [ROW_LEN + 1]byte{}
 	for i := 0; i < ROW_LEN; i++ {
 		candidates[board[row][i]] = 1
 		candidates[board[i][col]] = 1
@@ -248,16 +248,16 @@ func calculateCandidates(board *[ROW_LEN][ROW_LEN]int, row, col int) []int {
 			candidates[board[startRow+i][startCol+j]] = 1
 		}
 	}
-	result := []int{}
+	result := []byte{}
 	for i := 1; i < 17; i++ {
 		if candidates[i] == 0 {
-			result = append(result, i)
+			result = append(result, byte(i))
 		}
 	}
 	return result
 }
 
-func Count0(board *[ROW_LEN][ROW_LEN]int) int {
+func Count0(board *[ROW_LEN][ROW_LEN]byte) int {
 	count := 0
 	for i := 0; i < ROW_LEN; i++ {
 		for j := 0; j < ROW_LEN; j++ {
@@ -269,13 +269,12 @@ func Count0(board *[ROW_LEN][ROW_LEN]int) int {
 	return count
 }
 
-func Preprocessing(board *[16][16]int) *[16][16][]int {
+func Preprocessing(board *[16][16]byte) *[16][16][]byte {
 	time_now := time.Now()
-	PrintBoard(*board)
 	num0 := []int{-1, 0}
 	PreprocessBoard(board)
 	num0 = append(num0, Count0(board))
-	var candidates *[16][16][]int
+	var candidates *[16][16][]byte
 	for {
 		candidates = PreprocessBoard(board)
 		if num0[len(num0)-1] == num0[len(num0)-2] {
@@ -283,10 +282,8 @@ func Preprocessing(board *[16][16]int) *[16][16][]int {
 		} else {
 			num0 = append(num0, Count0(board))
 		}
-		fmt.Println("Number of unknowns: ", num0[len(num0)-1])
 	}
 	fmt.Println("Time taken for preprocessing: ", time.Since(time_now))
-	fmt.Println("Board after preprocessing: ", num0[len(num0)-1])
-	PrintBoard(*board)
+	fmt.Println("Nuber of empty spots after preprocessing: ", num0[len(num0)-1])
 	return candidates
 }

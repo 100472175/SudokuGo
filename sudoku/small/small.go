@@ -9,7 +9,7 @@ import (
 
 const ROW_NUM = 4
 
-func PrintBoard(board [ROW_NUM][ROW_NUM]int) {
+func PrintBoard(board [ROW_NUM][ROW_NUM]byte) {
 	fmt.Println("+-----+-----+")
 	for row := 0; row < ROW_NUM; row++ {
 		fmt.Print("| ")
@@ -30,7 +30,7 @@ func PrintBoard(board [ROW_NUM][ROW_NUM]int) {
 	}
 }
 
-func ParseInput(input string) [ROW_NUM][ROW_NUM]int {
+func ParseInput(input string) [ROW_NUM][ROW_NUM]byte {
 	file, err := os.Open(input)
 	if err != nil {
 		log.Fatalf("Error opening the file: %v", err)
@@ -49,14 +49,14 @@ func ParseInput(input string) [ROW_NUM][ROW_NUM]int {
 			os.Exit(1)
 		}
 
-		board := [ROW_NUM][ROW_NUM]int{}
+		board := [ROW_NUM][ROW_NUM]byte{}
 		for i, c := range string(content) {
 			row := i / ROW_NUM
 			col := i % ROW_NUM
 			if c == '.' {
 				board[row][col] = 0
 			} else {
-				board[row][col] = int(c - '0')
+				board[row][col] = byte(c - '0')
 			}
 		}
 		return board
@@ -68,7 +68,7 @@ func ParseInput(input string) [ROW_NUM][ROW_NUM]int {
 		}
 		defer file.Close()
 
-		board := [ROW_NUM][ROW_NUM]int{}
+		board := [ROW_NUM][ROW_NUM]byte{}
 		scanner = bufio.NewScanner(file)
 		for i := 0; i < ROW_NUM; i++ {
 			scanner.Scan()
@@ -77,7 +77,7 @@ func ParseInput(input string) [ROW_NUM][ROW_NUM]int {
 				if c == '.' || c == 'x' || c == 'X' || c == '0' || c == ' ' {
 					board[i][j] = 0
 				} else {
-					board[i][j] = int(c - '0')
+					board[i][j] = byte(c - '0')
 				}
 			}
 		}
@@ -86,7 +86,7 @@ func ParseInput(input string) [ROW_NUM][ROW_NUM]int {
 	}
 }
 
-func HasDuplicates(counter [5]int) bool {
+func HasDuplicates(counter [5]byte) bool {
 	for i, count := range counter {
 		if i == 0 {
 			continue
@@ -98,10 +98,10 @@ func HasDuplicates(counter [5]int) bool {
 	return false
 }
 
-func IsBoardValid(board *[ROW_NUM][ROW_NUM]int) bool {
+func IsBoardValid(board *[ROW_NUM][ROW_NUM]byte) bool {
 	//check duplicates by row
 	for row := 0; row < ROW_NUM; row++ {
-		counter := [5]int{}
+		counter := [5]byte{}
 		for col := 0; col < ROW_NUM; col++ {
 			counter[board[row][col]]++
 		}
@@ -112,7 +112,7 @@ func IsBoardValid(board *[ROW_NUM][ROW_NUM]int) bool {
 
 	//check duplicates by column
 	for row := 0; row < ROW_NUM; row++ {
-		counter := [5]int{}
+		counter := [5]byte{}
 		for col := 0; col < ROW_NUM; col++ {
 			counter[board[col][row]]++
 		}
@@ -124,7 +124,7 @@ func IsBoardValid(board *[ROW_NUM][ROW_NUM]int) bool {
 	//check 3x3 section
 	for i := 0; i < ROW_NUM; i += 2 {
 		for j := 0; j < ROW_NUM; j += 2 {
-			counter := [5]int{}
+			counter := [5]byte{}
 			for row := i; row < i+2; row++ {
 				for col := j; col < j+2; col++ {
 					counter[board[row][col]]++
@@ -139,7 +139,7 @@ func IsBoardValid(board *[ROW_NUM][ROW_NUM]int) bool {
 	return true
 }
 
-func HasEmptyCell(board *[ROW_NUM][ROW_NUM]int) bool {
+func HasEmptyCell(board *[ROW_NUM][ROW_NUM]byte) bool {
 	for i := 0; i < ROW_NUM; i++ {
 		for j := 0; j < ROW_NUM; j++ {
 			if board[i][j] == 0 {
@@ -150,7 +150,7 @@ func HasEmptyCell(board *[ROW_NUM][ROW_NUM]int) bool {
 	return false
 }
 
-func Backtrack(board *[ROW_NUM][ROW_NUM]int) bool {
+func Backtrack(board *[ROW_NUM][ROW_NUM]byte) bool {
 	if !HasEmptyCell(board) {
 		return true
 	}
@@ -158,7 +158,7 @@ func Backtrack(board *[ROW_NUM][ROW_NUM]int) bool {
 		for j := 0; j < ROW_NUM; j++ {
 			if board[i][j] == 0 {
 				for candidate := ROW_NUM; candidate >= 1; candidate-- {
-					board[i][j] = candidate
+					board[i][j] = byte(candidate)
 					if IsBoardValid(board) {
 						if Backtrack(board) {
 							return true

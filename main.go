@@ -1,9 +1,9 @@
 package main
 
 import (
-	large "Sudoku/sudoku/large"
-	medium "Sudoku/sudoku/medium"
-	small "Sudoku/sudoku/small"
+	"Sudoku/sudoku/large"
+	"Sudoku/sudoku/medium"
+	"Sudoku/sudoku/small"
 	"bytes"
 	"fmt"
 	"io"
@@ -13,9 +13,9 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: go run main.go <input_file>")
-		os.Exit(1)
+	if len(os.Args) < 2 || len(os.Args) > 3 {
+		fmt.Println("Usage: go run main.go <input_file> [output_file]")
+		os.Exit(0)
 	}
 	now := time.Now()
 	defer func() {
@@ -33,33 +33,34 @@ func main() {
 		log.Fatalf("Error counting the lines: %v", err)
 	}
 
-	if lines == 16 {
+	switch lines {
+	case 16:
 		board := large.ParseInput(os.Args[1])
 		candidates := large.Preprocessing(&board)
 		if large.Backtrack(&board, candidates) {
-			fmt.Println("The 16x16 Sudoku has been solved.")
+			fmt.Println("The 16x16 Sudoku has been solved. This is the result ->")
 			large.PrintBoard(board)
 		} else {
 			fmt.Println("The 16x16 Sudoku can't be solved.")
 		}
-	} else if lines == 9 {
+	case 9:
 		board := medium.ParseInput(os.Args[1])
 		candidates := medium.Preprocessing(&board)
 		if medium.Backtrack(&board, candidates) {
-			fmt.Println("The 9x9 Sudoku has been solved.")
+			fmt.Println("The 9x9 Sudoku has been solved. This is the result ->")
 			medium.PrintBoard(board)
 		} else {
 			fmt.Printf("The 9x9 Sudoku can't be solved.")
 		}
-	} else if lines == 4 {
+	case 4:
 		board := small.ParseInput(os.Args[1])
 		if small.Backtrack(&board) {
-			fmt.Println("The 4x4 Sudoku has been solved.")
+			fmt.Println("The 4x4 Sudoku has been solved. This is the result ->")
 			small.PrintBoard(board)
 		} else {
 			fmt.Println("The 4x4 Sudoku can't be solved.")
 		}
-	} else {
+	default:
 		fmt.Println("Invalid number of columns. Please enter 4, 9, or 16 in the file.")
 	}
 
